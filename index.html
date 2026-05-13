@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>여행 준비물 체크리스트</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 16px;
+    color: #2c3e50;
+  }
+
+  .container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    padding: 28px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #1a202c;
+  }
+
+  .subtitle {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  /* Presets */
+  .presets {
+    margin-bottom: 20px;
+  }
+
+  .preset-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .preset-btn {
+    padding: 10px 6px;
+    background: #f7fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4a5568;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .preset-btn:hover {
+    border-color: #667eea;
+    background: #edf2ff;
+    color: #667eea;
+    transform: translateY(-1px);
+  }
+
+  .preset-btn .preset-icon {
+    font-size: 18px;
+  }
+
+  /* Progress */
+  .progress-wrapper {
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .progress-percent {
+    color: #667eea;
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  /* Input */
+  .input-area {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  #itemInput {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #itemInput:focus {
+    border-color: #667eea;
+  }
+
+  #categorySelect {
+    padding: 12px 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  #categorySelect:focus {
+    border-color: #667eea;
+  }
+
+  #addBtn {
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+
+  #addBtn:hover {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  #addBtn:active {
+    transform: scale(0.97);
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+
+  #clearBtn {
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  #clearBtn:hover {
+    background: #fed7d7;
+    color: #e53e3e;
+  }
+
+  /* List */
+  #list {
+    list-style: none;
+    max-height: 440px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+
+  #list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #list::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+  }
+
+  .category-group {
+    margin-bottom: 14px;
+  }
+
+  .category-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 6px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .category-header .count {
+    color: #a0aec0;
+    font-weight: 600;
+    font-size: 11px;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px;
+    background: #f7fafc;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+  }
+
+  .item:hover {
+    background: #edf2f7;
+  }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #cbd5e0;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    background: white;
+  }
+
+  .checkbox.checked {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+  }
+
+  .checkbox.checked::after {
+    content: "";
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .item-text {
+    flex: 1;
+    margin: 0 12px;
+    font-size: 15px;
+    color: #2d3748;
+    word-break: break-all;
+    cursor: text;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .item-text:hover {
+    border-color: #e2e8f0;
+  }
+
+  .item.done .item-text {
+    text-decoration: line-through;
+    color: #a0aec0;
+  }
+
+  .item-edit {
+    flex: 1;
+    margin: 0 12px;
+    font-size: 15px;
+    color: #2d3748;
+    font-family: inherit;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1.5px solid #667eea;
+    outline: none;
+    background: white;
+  }
+
+  .delete-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: #cbd5e0;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .delete-btn:hover {
+    background: #fed7d7;
+    color: #e53e3e;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a0aec0;
+    font-size: 14px;
+  }
+
+  .empty-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .hint {
+    font-size: 11px;
+    color: #a0aec0;
+    text-align: center;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>✈️ 여행 준비물</h1>
+    <p class="subtitle">떠나기 전 챙길 것들을 정리해보세요</p>
+
+    <div class="presets">
+      <div class="section-label">템플릿 불러오기</div>
+      <div class="preset-buttons" id="presetButtons"></div>
+    </div>
+
+    <div class="progress-wrapper">
+      <div class="progress-text">
+        <span id="progressLabel">0개 중 0개 완료</span>
+        <span class="progress-percent" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="itemInput" placeholder="예: 여권, 충전기, 칫솔..." maxlength="50">
+      <select id="categorySelect"></select>
+      <button id="addBtn">추가</button>
+    </div>
+
+    <div class="toolbar">
+      <button id="clearBtn">전체 삭제</button>
+    </div>
+
+    <ul id="list"></ul>
+
+    <p class="hint">항목을 더블클릭하면 수정할 수 있어요</p>
+  </div>
+
+<script>
+  // 카테고리 정의
+  const categories = [
+    { id: 'docs',        name: '서류',       icon: '📄' },
+    { id: 'electronics', name: '전자기기',   icon: '💻' },
+    { id: 'clothing',    name: '의류',       icon: '👕' },
+    { id: 'toiletries',  name: '세면도구',   icon: '🧴' },
+    { id: 'medicine',    name: '의약품',     icon: '💊' },
+    { id: 'gear',        name: '장비',       icon: '🏕️' },
+    { id: 'other',       name: '기타',       icon: '📦' },
+  ];
+
+  // 프리셋(템플릿)
+  const presets = {
+    overseas: {
+      name: '해외',
+      icon: '✈️',
+      items: [
+        { text: '여권', category: 'docs' },
+        { text: '비자/ESTA', category: 'docs' },
+        { text: '항공권/E-티켓', category: 'docs' },
+        { text: '여행자보험증', category: 'docs' },
+        { text: '환전한 현금', category: 'docs' },
+        { text: '신용카드', category: 'docs' },
+        { text: '휴대폰 충전기', category: 'electronics' },
+        { text: '보조배터리', category: 'electronics' },
+        { text: '멀티 어댑터', category: 'electronics' },
+        { text: '이어폰', category: 'electronics' },
+        { text: '속옷·양말', category: 'clothing' },
+        { text: '상의·하의', category: 'clothing' },
+        { text: '잠옷', category: 'clothing' },
+        { text: '겉옷', category: 'clothing' },
+        { text: '칫솔·치약', category: 'toiletries' },
+        { text: '샴푸·바디워시', category: 'toiletries' },
+        { text: '스킨케어', category: 'toiletries' },
+        { text: '상비약', category: 'medicine' },
+      ],
+    },
+    domestic: {
+      name: '국내',
+      icon: '🏞️',
+      items: [
+        { text: '신분증', category: 'docs' },
+        { text: '예약확인서', category: 'docs' },
+        { text: '교통카드', category: 'docs' },
+        { text: '휴대폰 충전기', category: 'electronics' },
+        { text: '보조배터리', category: 'electronics' },
+        { text: '속옷·양말', category: 'clothing' },
+        { text: '갈아입을 옷', category: 'clothing' },
+        { text: '잠옷', category: 'clothing' },
+        { text: '칫솔·치약', category: 'toiletries' },
+        { text: '스킨케어', category: 'toiletries' },
+        { text: '상비약', category: 'medicine' },
+      ],
+    },
+    camping: {
+      name: '캠핑',
+      icon: '🏕️',
+      items: [
+        { text: '신분증', category: 'docs' },
+        { text: '예약확인서', category: 'docs' },
+        { text: '휴대폰 충전기', category: 'electronics' },
+        { text: '헤드랜턴', category: 'electronics' },
+        { text: '보조배터리', category: 'electronics' },
+        { text: '방수 겉옷', category: 'clothing' },
+        { text: '여벌 옷', category: 'clothing' },
+        { text: '등산화/운동화', category: 'clothing' },
+        { text: '칫솔·치약', category: 'toiletries' },
+        { text: '물티슈', category: 'toiletries' },
+        { text: '구급함', category: 'medicine' },
+        { text: '모기약', category: 'medicine' },
+        { text: '텐트', category: 'gear' },
+        { text: '침낭·매트', category: 'gear' },
+        { text: '랜턴', category: 'gear' },
+        { text: '버너·코펠', category: 'gear' },
+        { text: '캠핑 의자·테이블', category: 'gear' },
+        { text: '아이스박스', category: 'gear' },
+      ],
+    },
+    business: {
+      name: '출장',
+      icon: '💼',
+      items: [
+        { text: '신분증', category: 'docs' },
+        { text: '명함', category: 'docs' },
+        { text: '출장 서류·계약서', category: 'docs' },
+        { text: '노트북·충전기', category: 'electronics' },
+        { text: '휴대폰 충전기', category: 'electronics' },
+        { text: '보조배터리', category: 'electronics' },
+        { text: '와이셔츠', category: 'clothing' },
+        { text: '정장·재킷', category: 'clothing' },
+        { text: '넥타이', category: 'clothing' },
+        { text: '구두', category: 'clothing' },
+        { text: '속옷·양말', category: 'clothing' },
+        { text: '칫솔·치약', category: 'toiletries' },
+        { text: '면도기', category: 'toiletries' },
+        { text: '상비약', category: 'medicine' },
+      ],
+    },
+  };
+
+  // 상태
+  const items = [];
+  let nextId = 1;
+
+  // DOM 참조
+  const input = document.getElementById('itemInput');
+  const categorySelect = document.getElementById('categorySelect');
+  const addBtn = document.getElementById('addBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const list = document.getElementById('list');
+  const presetButtons = document.getElementById('presetButtons');
+  const progressLabel = document.getElementById('progressLabel');
+  const progressPercent = document.getElementById('progressPercent');
+  const progressFill = document.getElementById('progressFill');
+
+  // 카테고리 헬퍼
+  function getCategory(id) {
+    return categories.find(c => c.id === id) || categories[categories.length - 1];
+  }
+
+  // 카테고리 select 채우기
+  function initCategorySelect() {
+    for (const c of categories) {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = `${c.icon} ${c.name}`;
+      categorySelect.appendChild(opt);
+    }
+    categorySelect.value = 'other';
+  }
+
+  // 프리셋 버튼 만들기
+  function initPresetButtons() {
+    for (const key of Object.keys(presets)) {
+      const p = presets[key];
+      const btn = document.createElement('button');
+      btn.className = 'preset-btn';
+      btn.innerHTML = `<span class="preset-icon">${p.icon}</span><span>${p.name}</span>`;
+      btn.addEventListener('click', () => loadPreset(key));
+      presetButtons.appendChild(btn);
+    }
+  }
+
+  // 프리셋 불러오기 (기존 항목에 추가, 중복 텍스트는 건너뜀)
+  function loadPreset(key) {
+    const preset = presets[key];
+    if (!preset) return;
+    const existing = new Set(items.map(i => i.text));
+    let added = 0;
+    for (const entry of preset.items) {
+      if (existing.has(entry.text)) continue;
+      items.push({ id: nextId++, text: entry.text, done: false, category: entry.category });
+      added++;
+    }
+    render();
+  }
+
+  function addItem() {
+    const text = input.value.trim();
+    if (!text) return;
+    items.push({
+      id: nextId++,
+      text,
+      done: false,
+      category: categorySelect.value,
+    });
+    input.value = '';
+    input.focus();
+    render();
+  }
+
+  function toggleItem(id) {
+    const item = items.find(i => i.id === id);
+    if (item) item.done = !item.done;
+    render();
+  }
+
+  function deleteItem(id) {
+    const idx = items.findIndex(i => i.id === id);
+    if (idx !== -1) items.splice(idx, 1);
+    render();
+  }
+
+  function clearAll() {
+    if (items.length === 0) return;
+    if (!confirm('모든 항목을 삭제할까요?')) return;
+    items.length = 0;
+    render();
+  }
+
+  // 인라인 편집 시작
+  function startEdit(id, textEl) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+
+    const editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.className = 'item-edit';
+    editInput.value = item.text;
+    editInput.maxLength = 50;
+
+    let committed = false;
+
+    const commit = () => {
+      if (committed) return;
+      committed = true;
+      const newText = editInput.value.trim();
+      if (newText) item.text = newText;
+      render();
+    };
+
+    const cancel = () => {
+      if (committed) return;
+      committed = true;
+      render();
+    };
+
+    editInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        commit();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancel();
+      }
+    });
+    editInput.addEventListener('blur', commit);
+
+    textEl.replaceWith(editInput);
+    editInput.focus();
+    editInput.select();
+  }
+
+  function render() {
+    list.innerHTML = '';
+
+    if (items.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.innerHTML = '<div class="empty-icon">🧳</div>아직 추가된 항목이 없어요<br>템플릿을 불러오거나 직접 입력해 보세요';
+      list.appendChild(empty);
+    } else {
+      // 카테고리 순서대로 그룹화
+      for (const cat of categories) {
+        const groupItems = items.filter(i => i.category === cat.id);
+        if (groupItems.length === 0) continue;
+
+        const groupDoneCount = groupItems.filter(i => i.done).length;
+
+        const group = document.createElement('div');
+        group.className = 'category-group';
+
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        header.innerHTML = `<span>${cat.icon}</span><span>${cat.name}</span><span class="count">${groupDoneCount}/${groupItems.length}</span>`;
+        group.appendChild(header);
+
+        for (const item of groupItems) {
+          const li = document.createElement('li');
+          li.className = 'item' + (item.done ? ' done' : '');
+
+          const checkbox = document.createElement('div');
+          checkbox.className = 'checkbox' + (item.done ? ' checked' : '');
+          checkbox.addEventListener('click', () => toggleItem(item.id));
+
+          const text = document.createElement('span');
+          text.className = 'item-text';
+          text.textContent = item.text;
+          text.title = '더블클릭하여 수정';
+          text.addEventListener('dblclick', () => startEdit(item.id, text));
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'delete-btn';
+          delBtn.innerHTML = '×';
+          delBtn.setAttribute('aria-label', '삭제');
+          delBtn.addEventListener('click', () => deleteItem(item.id));
+
+          li.appendChild(checkbox);
+          li.appendChild(text);
+          li.appendChild(delBtn);
+          group.appendChild(li);
+        }
+
+        list.appendChild(group);
+      }
+    }
+
+    const total = items.length;
+    const done = items.filter(i => i.done).length;
+    const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+    progressLabel.textContent = `${total}개 중 ${done}개 완료`;
+    progressPercent.textContent = `${percent}%`;
+    progressFill.style.width = `${percent}%`;
+  }
+
+  // 이벤트 바인딩
+  addBtn.addEventListener('click', addItem);
+  clearBtn.addEventListener('click', clearAll);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') addItem();
+  });
+
+  // 초기화
+  initCategorySelect();
+  initPresetButtons();
+  render();
+</script>
+</body>
+</html>
