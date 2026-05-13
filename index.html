@@ -3,711 +3,932 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>여행 준비물 체크리스트</title>
+<title>여행 컨설팅 · 당신만의 여행 처방전</title>
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  :root {
+    --bg-1: #fef6ec;
+    --bg-2: #e9f2ff;
+    --ink: #1a202c;
+    --ink-soft: #4a5568;
+    --ink-mute: #718096;
+    --line: #e2e8f0;
+    --card: #ffffff;
+    --brand: #2b6cb0;
+    --brand-soft: #ebf4ff;
+    --accent: #dd6b20;
+    --accent-soft: #fffaf0;
+    --good: #38a169;
+    --shadow: 0 24px 64px rgba(15, 23, 42, 0.10);
   }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding: 24px 16px 48px;
+    min-height: 100%;
     display: flex;
-    align-items: flex-start;
     justify-content: center;
-    padding: 24px 16px;
-    color: #2c3e50;
   }
 
-  .container {
-    background: #ffffff;
+  .app {
     width: 100%;
-    max-width: 520px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .brand {
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.2px;
+  }
+  .brand .dot { color: var(--brand); }
+
+  .card {
+    background: var(--card);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
     padding: 28px;
   }
 
-  h1 {
-    font-size: 24px;
+  h1.title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    margin-bottom: 8px;
+  }
+  h2.title {
+    font-size: 22px;
     font-weight: 700;
-    margin-bottom: 4px;
-    color: #1a202c;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+  }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 22px;
   }
 
-  .subtitle {
-    color: #718096;
+  /* Welcome */
+  .hero-emoji {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  .perks {
+    list-style: none;
+    margin: 18px 0 24px;
+    display: grid;
+    gap: 10px;
+  }
+  .perks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
     font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .perks li::before {
+    content: "✓";
+    color: var(--good);
+    font-weight: 700;
+    margin-top: 1px;
+  }
+
+  .primary {
+    width: 100%;
+    padding: 16px 20px;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    font-family: inherit;
+  }
+  .primary:hover { opacity: 0.92; }
+  .primary:active { transform: scale(0.98); }
+  .primary.brand { background: var(--brand); }
+
+  .ghost {
+    background: transparent;
+    border: 1.5px solid var(--line);
+    color: var(--ink-soft);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .ghost:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+  /* Quiz */
+  .progress {
+    display: flex;
+    gap: 6px;
     margin-bottom: 20px;
   }
+  .progress .seg {
+    flex: 1;
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress .seg.on { background: var(--brand); }
 
-  .section-label {
+  .step-label {
     font-size: 12px;
-    font-weight: 600;
-    color: #718096;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: 0.6px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
     margin-bottom: 8px;
   }
 
-  /* Presets */
-  .presets {
-    margin-bottom: 20px;
-  }
-
-  .preset-buttons {
+  .options {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    gap: 10px;
+    margin-top: 18px;
   }
+  .options.two-col { grid-template-columns: 1fr 1fr; }
 
-  .preset-btn {
-    padding: 10px 6px;
-    background: #f7fafc;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
+  .option {
+    text-align: left;
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    color: #4a5568;
-    transition: all 0.2s;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+  .option:hover {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+  }
+  .option .icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .option .opt-text {
+    flex: 1;
+    font-weight: 600;
+  }
+  .option .opt-sub {
+    display: block;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 2px;
   }
 
-  .preset-btn:hover {
-    border-color: #667eea;
-    background: #edf2ff;
-    color: #667eea;
-    transform: translateY(-1px);
-  }
-
-  .preset-btn .preset-icon {
-    font-size: 18px;
-  }
-
-  /* Progress */
-  .progress-wrapper {
-    background: #f7fafc;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-  }
-
-  .progress-text {
+  .quiz-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    font-size: 14px;
+    margin-top: 18px;
+  }
+
+  /* Loading */
+  .loading-wrap {
+    text-align: center;
+    padding: 36px 0 28px;
+  }
+  .spinner {
+    width: 56px; height: 56px;
+    border: 4px solid var(--line);
+    border-top-color: var(--brand);
+    border-radius: 50%;
+    margin: 0 auto 18px;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
     font-weight: 600;
-    color: #4a5568;
+    color: var(--ink-soft);
   }
 
-  .progress-percent {
-    color: #667eea;
+  /* Result */
+  .persona-card {
+    background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+    color: white;
+    padding: 22px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+  }
+  .persona-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .persona-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+  }
+  .persona-desc {
+    font-size: 14px;
+    opacity: 0.92;
+    line-height: 1.6;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink-soft);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 22px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .dest-list { display: grid; gap: 8px; }
+  .dest-item {
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .dest-item:hover { border-color: var(--brand); }
+  .dest-item.active {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+  }
+  .dest-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .dest-emoji { font-size: 22px; }
+  .dest-name { font-weight: 700; font-size: 16px; }
+  .dest-country { color: var(--ink-mute); font-size: 12px; margin-left: auto; }
+  .dest-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .dest-rank.r2 { background: #a0aec0; }
+  .dest-rank.r3 { background: #cd7f32; }
+  .dest-score {
+    color: var(--brand);
     font-weight: 700;
+    font-size: 13px;
+    margin-left: 6px;
+  }
+  .dest-reason {
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.55;
   }
 
-  .progress-bar {
-    background: #e2e8f0;
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
+  .detail-card {
+    background: var(--accent-soft);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 18px;
   }
-
-  .progress-fill {
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    height: 100%;
-    width: 0%;
-    border-radius: 4px;
-    transition: width 0.3s ease;
+  .detail-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
   }
-
-  /* Input */
-  .input-area {
+  .detail-name {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .detail-country {
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+  .detail-tags {
     display: flex;
     gap: 6px;
-    margin-bottom: 8px;
-  }
-
-  #itemInput {
-    flex: 1;
-    min-width: 0;
-    padding: 12px 14px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  #itemInput:focus {
-    border-color: #667eea;
-  }
-
-  #categorySelect {
-    padding: 12px 10px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 14px;
-    outline: none;
-    background: white;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
-  #categorySelect:focus {
-    border-color: #667eea;
-  }
-
-  #addBtn {
-    padding: 12px 18px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.2s;
-    white-space: nowrap;
-  }
-
-  #addBtn:hover {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  }
-
-  #addBtn:active {
-    transform: scale(0.97);
-  }
-
-  .toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-  }
-
-  #clearBtn {
-    background: transparent;
-    border: none;
-    color: #a0aec0;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  #clearBtn:hover {
-    background: #fed7d7;
-    color: #e53e3e;
-  }
-
-  /* List */
-  #list {
-    list-style: none;
-    max-height: 440px;
-    overflow-y: auto;
-    padding-right: 2px;
-  }
-
-  #list::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  #list::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 3px;
-  }
-
-  .category-group {
+    flex-wrap: wrap;
     margin-bottom: 14px;
   }
-
-  .category-header {
-    font-size: 12px;
+  .tag {
+    font-size: 11px;
     font-weight: 700;
-    color: #667eea;
-    margin-bottom: 6px;
-    padding: 0 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    color: var(--accent);
+    background: white;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid #fbd38d;
+  }
+
+  .detail-block { margin-top: 14px; }
+  .detail-block h4 {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--ink-soft);
+    letter-spacing: 0.4px;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
-
-  .category-header .count {
-    color: #a0aec0;
-    font-weight: 600;
-    font-size: 11px;
-  }
-
-  .item {
-    display: flex;
-    align-items: center;
-    padding: 11px 12px;
-    background: #f7fafc;
-    border-radius: 10px;
     margin-bottom: 6px;
-    transition: background 0.2s;
   }
-
-  .item:hover {
-    background: #edf2f7;
+  .detail-block ul {
+    list-style: none;
+    display: grid;
+    gap: 4px;
   }
-
-  .checkbox {
-    width: 22px;
-    height: 22px;
-    border: 2px solid #cbd5e0;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-    background: white;
-  }
-
-  .checkbox.checked {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-color: transparent;
-  }
-
-  .checkbox.checked::after {
-    content: "";
-    width: 6px;
-    height: 11px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg) translate(-1px, -1px);
-  }
-
-  .item-text {
-    flex: 1;
-    margin: 0 12px;
-    font-size: 15px;
-    color: #2d3748;
-    word-break: break-all;
-    cursor: text;
-    padding: 4px 6px;
-    border-radius: 6px;
-    border: 1.5px solid transparent;
-    transition: border-color 0.15s;
-  }
-
-  .item-text:hover {
-    border-color: #e2e8f0;
-  }
-
-  .item.done .item-text {
-    text-decoration: line-through;
-    color: #a0aec0;
-  }
-
-  .item-edit {
-    flex: 1;
-    margin: 0 12px;
-    font-size: 15px;
-    color: #2d3748;
-    font-family: inherit;
-    padding: 4px 6px;
-    border-radius: 6px;
-    border: 1.5px solid #667eea;
-    outline: none;
-    background: white;
-  }
-
-  .delete-btn {
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: transparent;
-    color: #cbd5e0;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-
-  .delete-btn:hover {
-    background: #fed7d7;
-    color: #e53e3e;
-  }
-
-  .empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: #a0aec0;
+  .detail-block li {
     font-size: 14px;
+    color: var(--ink);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .detail-block li::before {
+    content: "·";
+    position: absolute;
+    left: 4px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .detail-block .budget {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
   }
 
-  .empty-icon {
-    font-size: 40px;
-    margin-bottom: 8px;
+  .result-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 22px;
   }
+  .result-actions button { flex: 1; }
 
-  .hint {
-    font-size: 11px;
-    color: #a0aec0;
+  .footer-note {
     text-align: center;
-    margin-top: 12px;
+    color: var(--ink-mute);
+    font-size: 12px;
+    margin-top: 8px;
   }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>✈️ 여행 준비물</h1>
-    <p class="subtitle">떠나기 전 챙길 것들을 정리해보세요</p>
-
-    <div class="presets">
-      <div class="section-label">템플릿 불러오기</div>
-      <div class="preset-buttons" id="presetButtons"></div>
-    </div>
-
-    <div class="progress-wrapper">
-      <div class="progress-text">
-        <span id="progressLabel">0개 중 0개 완료</span>
-        <span class="progress-percent" id="progressPercent">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-    </div>
-
-    <div class="input-area">
-      <input type="text" id="itemInput" placeholder="예: 여권, 충전기, 칫솔..." maxlength="50">
-      <select id="categorySelect"></select>
-      <button id="addBtn">추가</button>
-    </div>
-
-    <div class="toolbar">
-      <button id="clearBtn">전체 삭제</button>
-    </div>
-
-    <ul id="list"></ul>
-
-    <p class="hint">항목을 더블클릭하면 수정할 수 있어요</p>
-  </div>
+  <div class="app" id="app"></div>
 
 <script>
-  // 카테고리 정의
-  const categories = [
-    { id: 'docs',        name: '서류',       icon: '📄' },
-    { id: 'electronics', name: '전자기기',   icon: '💻' },
-    { id: 'clothing',    name: '의류',       icon: '👕' },
-    { id: 'toiletries',  name: '세면도구',   icon: '🧴' },
-    { id: 'medicine',    name: '의약품',     icon: '💊' },
-    { id: 'gear',        name: '장비',       icon: '🏕️' },
-    { id: 'other',       name: '기타',       icon: '📦' },
+  // -------- Data --------
+  const destinations = [
+    {
+      id: 'jeju', name: '제주', country: '대한민국', emoji: '🍊',
+      tags: ['휴양', '자연', '국내'],
+      budget: 1, language: 1, adventure: 1,
+      seasonScore: { spring: 5, summer: 4, autumn: 5, winter: 3 },
+      companionFit: { solo: 4, couple: 5, family: 5, friends: 5 },
+      styleFit: { resort: 4, city: 3, nature: 5, culture: 3 },
+      oneLineReason: '비행기 한 시간, 마음의 거리는 한참 멀어지는 가장 부담 없는 휴식.',
+      course: [
+        'Day 1 — 도착 → 협재 해수욕장 산책 → 애월 카페거리',
+        'Day 2 — 한라산 어리목 코스(반나절) → 흑돼지 저녁',
+        'Day 3 — 우도 당일치기 → 성산일출봉 일몰',
+        'Day 4 — 올레 7코스 일부 → 공항',
+      ],
+      budgetEstimate: '3박4일 1인 35~55만원',
+      prep: ['신분증', '편한 운동화', '얇은 겉옷(저녁 기온차)', '선크림'],
+      tips: [
+        '렌터카는 출발 3주 전 예약, 성수기엔 더 빨리',
+        '맛집은 평일 11:30 오픈런이 가장 안전',
+        '서쪽·동쪽 동선을 분리해 짜야 운전 피로 적음',
+      ],
+    },
+    {
+      id: 'fukuoka', name: '후쿠오카', country: '일본', emoji: '🍜',
+      tags: ['미식', '도시', '근거리'],
+      budget: 2, language: 2, adventure: 1,
+      seasonScore: { spring: 5, summer: 3, autumn: 5, winter: 4 },
+      companionFit: { solo: 5, couple: 5, family: 4, friends: 5 },
+      styleFit: { resort: 2, city: 4, nature: 2, culture: 4 },
+      oneLineReason: '두 시간 비행으로 만나는 라멘과 모츠나베의 도시. 첫 해외로 가장 안전한 카드.',
+      course: [
+        'Day 1 — 공항 → 텐진 호텔 → 나카스 야타이(포장마차)',
+        'Day 2 — 다자이후 텐만구 → 캐널시티 → 쿠시야키 저녁',
+        'Day 3 — 유후인 당일치기, 료칸 노천온천',
+        'Day 4 — 모츠나베 점심 → 공항 면세',
+      ],
+      budgetEstimate: '3박4일 1인 70~110만원',
+      prep: ['여권(유효기간 6개월 이상)', '해외결제 카드', '엔화 약간', 'IC카드(스고카/스이카)'],
+      tips: [
+        '이치란 라멘 본점은 줄, 분점이 회전율 좋음',
+        '교통은 nimoca/Suica로 통일하면 편함',
+        '환율 따라 다르지만 카드+현금 6:4 비율이 무난',
+      ],
+    },
+    {
+      id: 'danang', name: '다낭', country: '베트남', emoji: '🏖️',
+      tags: ['휴양', '해변', '가성비'],
+      budget: 2, language: 2, adventure: 2,
+      seasonScore: { spring: 4, summer: 3, autumn: 4, winter: 5 },
+      companionFit: { solo: 3, couple: 5, family: 5, friends: 4 },
+      styleFit: { resort: 5, city: 3, nature: 4, culture: 3 },
+      oneLineReason: '리조트 가성비가 무너지지 않는 마지막 동남아 휴양지. 겨울에 가장 빛난다.',
+      course: [
+        'Day 1 — 도착 → 미케 비치 리조트 체크인 → 야시장',
+        'Day 2 — 바나힐(케이블카·골든브릿지) 종일',
+        'Day 3 — 호이안 올드타운 → 등불 야경 → 보트',
+        'Day 4 — 마사지 → 풀빌라 → 공항',
+      ],
+      budgetEstimate: '4박5일 1인 80~120만원 (리조트 포함)',
+      prep: ['여권(6개월+)', '전자비자(E-visa) 또는 무비자 확인', '달러 환전 후 현지서 동 환전', '모기 기피제', '얇은 긴소매(에어컨용)'],
+      tips: [
+        '그랩(Grab) 앱 필수 — 택시 바가지 회피',
+        '리조트는 환율 좋을 때 미리 결제, 환불 가능 옵션으로',
+        '식수는 무조건 생수, 길거리 얼음 주의',
+      ],
+    },
+    {
+      id: 'taipei', name: '타이베이', country: '대만', emoji: '🥟',
+      tags: ['미식', '도시', '야시장'],
+      budget: 2, language: 2, adventure: 2,
+      seasonScore: { spring: 5, summer: 2, autumn: 5, winter: 4 },
+      companionFit: { solo: 5, couple: 5, family: 4, friends: 5 },
+      styleFit: { resort: 2, city: 5, nature: 3, culture: 5 },
+      oneLineReason: '비행 2.5시간, 야시장과 딘타이펑과 지우펀. 미식 가성비의 최강자.',
+      course: [
+        'Day 1 — 공항 → 시먼딩 → 스린 야시장',
+        'Day 2 — 지우펀 + 스펀(천등) 당일치기',
+        'Day 3 — 국립고궁박물원 → 딘타이펑 → 타이베이 101 야경',
+        'Day 4 — 마사지 → 망고빙수 → 공항',
+      ],
+      budgetEstimate: '3박4일 1인 65~95만원',
+      prep: ['여권(6개월+)', '이지카드(현지 구매)', '대만달러 일부 환전', '우산(스콜 대비)'],
+      tips: [
+        '한자가 통하지만 영어·일본어가 더 잘 먹히는 가게도 많음',
+        '딘타이펑은 본점보다 분점이 빠름',
+        '지우펀은 평일 오전이 사진 잘 나옴',
+      ],
+    },
+    {
+      id: 'chiangmai', name: '치앙마이', country: '태국', emoji: '🐘',
+      tags: ['자연', '문화', '롱스테이'],
+      budget: 1, language: 2, adventure: 2,
+      seasonScore: { spring: 3, summer: 3, autumn: 4, winter: 5 },
+      companionFit: { solo: 5, couple: 4, family: 3, friends: 4 },
+      styleFit: { resort: 3, city: 3, nature: 5, culture: 5 },
+      oneLineReason: '느린 노마드의 도시. 한 달도 머물 수 있는 가성비와 사원의 고요함.',
+      course: [
+        'Day 1 — 도착 → 올드타운 사원 투어 → 선데이 마켓',
+        'Day 2 — 도이수텝 사원 + 몽족 마을',
+        'Day 3 — 코끼리 보호구역(윤리적 방문지 선택)',
+        'Day 4 — 쿠킹클래스 → 마사지 → 야시장',
+        'Day 5 — 카페 라이딩 → 공항',
+      ],
+      budgetEstimate: '4박5일 1인 70~100만원',
+      prep: ['여권(6개월+)', '바트 환전', '모기 기피제', '얇은 긴팔(사원 입장 매너)', '여행자 보험'],
+      tips: [
+        '코끼리 투어는 "라이딩 없는" 윤리적 캠프만 선택',
+        '그랩·볼트 이용, 송태우는 가격 협상',
+        '11월~2월이 건기, 3~4월 미세먼지 주의',
+      ],
+    },
+    {
+      id: 'bali', name: '발리', country: '인도네시아', emoji: '🌴',
+      tags: ['휴양', '자연', '리트릿'],
+      budget: 3, language: 2, adventure: 2,
+      seasonScore: { spring: 4, summer: 4, autumn: 4, winter: 5 },
+      companionFit: { solo: 4, couple: 5, family: 4, friends: 4 },
+      styleFit: { resort: 5, city: 2, nature: 5, culture: 4 },
+      oneLineReason: '풀빌라와 라이스테라스, 요가와 서핑. 자기 자신을 리셋하기에 가장 좋은 섬.',
+      course: [
+        'Day 1 — 덴파사르 도착 → 우붓 풀빌라 체크인',
+        'Day 2 — 라이스테라스 + 원숭이 숲 + 요가',
+        'Day 3 — 우붓 → 우루와뚜 절벽 사원 일몰',
+        'Day 4 — 누사두아 비치 리조트',
+        'Day 5 — 스파 + 쇼핑 → 공항',
+      ],
+      budgetEstimate: '4박5일 1인 130~200만원 (풀빌라 포함)',
+      prep: ['여권(6개월+)', '도착비자(VOA) 비용', '여행자 보험', '모기 기피제', '국제운전면허(스쿠터 시)'],
+      tips: [
+        '우붓·해변 지역을 한 트립에 다 넣지 말고 둘 중 비중을 정하기',
+        '스쿠터는 보험과 헬멧 필수, 사고 빈번',
+        '발리 벨리 대비 정수기 물·익힌 음식 위주',
+      ],
+    },
+    {
+      id: 'tokyo', name: '도쿄', country: '일본', emoji: '🗾',
+      tags: ['도시', '문화', '미식'],
+      budget: 3, language: 2, adventure: 2,
+      seasonScore: { spring: 5, summer: 3, autumn: 5, winter: 4 },
+      companionFit: { solo: 5, couple: 5, family: 4, friends: 5 },
+      styleFit: { resort: 2, city: 5, nature: 2, culture: 5 },
+      oneLineReason: '한 번도 안 가본 사람은 있어도, 한 번만 간 사람은 없는 도시.',
+      course: [
+        'Day 1 — 신주쿠 도착 → 오모이데요코초 이자카야',
+        'Day 2 — 아사쿠사 + 스카이트리 + 우에노',
+        'Day 3 — 시부야 + 하라주쿠 + 오모테산도 카페',
+        'Day 4 — 디즈니씨 또는 하코네 당일치기',
+        'Day 5 — 츠키지 시장 → 공항',
+      ],
+      budgetEstimate: '4박5일 1인 130~200만원',
+      prep: ['여권(6개월+)', 'JR Pass 또는 Suica 충전', '환전 + 해외결제 카드', '편한 신발(많이 걷는다)'],
+      tips: [
+        '인기 식당은 Tablecheck/Tabelog로 사전 예약',
+        '구글맵 환승 안내 그대로 따라가면 됨',
+        '면세는 합산 5,000엔 이상 + 같은 매장 같은 날',
+      ],
+    },
+    {
+      id: 'paris', name: '파리', country: '프랑스', emoji: '🗼',
+      tags: ['문화', '도시', '미식'],
+      budget: 4, language: 2, adventure: 2,
+      seasonScore: { spring: 5, summer: 4, autumn: 4, winter: 3 },
+      companionFit: { solo: 4, couple: 5, family: 3, friends: 4 },
+      styleFit: { resort: 2, city: 5, nature: 2, culture: 5 },
+      oneLineReason: '미술관·카페·골목·빵. 도시 그 자체가 컨텐츠인 곳.',
+      course: [
+        'Day 1 — 도착 → 마레지구 산책 → 비스트로 저녁',
+        'Day 2 — 루브르(반나절) + 오랑주리',
+        'Day 3 — 베르사유 당일치기',
+        'Day 4 — 오르세 + 몽마르트르 일몰',
+        'Day 5 — 에펠탑 + 마카롱 쇼핑 → 공항',
+      ],
+      budgetEstimate: '4박5일 1인 220~350만원',
+      prep: ['여권(6개월+)', 'ETIAS 시행 시 사전 신청', '여행자 보험(필수)', '유로 환전', '소매치기 방지 가방'],
+      tips: [
+        '루브르·오르세·베르사유는 무조건 사전 온라인 예약',
+        '메트로에서 가방은 앞으로, 휴대폰 들고 걸으며 보지 말기',
+        '점심은 "Formule" 코스가 가성비 최고',
+      ],
+    },
   ];
 
-  // 프리셋(템플릿)
-  const presets = {
-    overseas: {
-      name: '해외',
-      icon: '✈️',
-      items: [
-        { text: '여권', category: 'docs' },
-        { text: '비자/ESTA', category: 'docs' },
-        { text: '항공권/E-티켓', category: 'docs' },
-        { text: '여행자보험증', category: 'docs' },
-        { text: '환전한 현금', category: 'docs' },
-        { text: '신용카드', category: 'docs' },
-        { text: '휴대폰 충전기', category: 'electronics' },
-        { text: '보조배터리', category: 'electronics' },
-        { text: '멀티 어댑터', category: 'electronics' },
-        { text: '이어폰', category: 'electronics' },
-        { text: '속옷·양말', category: 'clothing' },
-        { text: '상의·하의', category: 'clothing' },
-        { text: '잠옷', category: 'clothing' },
-        { text: '겉옷', category: 'clothing' },
-        { text: '칫솔·치약', category: 'toiletries' },
-        { text: '샴푸·바디워시', category: 'toiletries' },
-        { text: '스킨케어', category: 'toiletries' },
-        { text: '상비약', category: 'medicine' },
+  const questions = [
+    {
+      key: 'companion',
+      title: '누구와 함께 떠나시나요?',
+      sub: '동행에 따라 적합한 동선이 크게 달라집니다.',
+      options: [
+        { value: 'solo', label: '혼자', icon: '🧍', sub: '내 페이스대로' },
+        { value: 'couple', label: '연인 / 배우자', icon: '💑', sub: '둘만의 시간' },
+        { value: 'family', label: '가족 (아이 동반)', icon: '👨‍👩‍👧', sub: '안전·편의 우선' },
+        { value: 'friends', label: '친구들', icon: '🧑‍🤝‍🧑', sub: '활기차게' },
       ],
     },
-    domestic: {
-      name: '국내',
-      icon: '🏞️',
-      items: [
-        { text: '신분증', category: 'docs' },
-        { text: '예약확인서', category: 'docs' },
-        { text: '교통카드', category: 'docs' },
-        { text: '휴대폰 충전기', category: 'electronics' },
-        { text: '보조배터리', category: 'electronics' },
-        { text: '속옷·양말', category: 'clothing' },
-        { text: '갈아입을 옷', category: 'clothing' },
-        { text: '잠옷', category: 'clothing' },
-        { text: '칫솔·치약', category: 'toiletries' },
-        { text: '스킨케어', category: 'toiletries' },
-        { text: '상비약', category: 'medicine' },
+    {
+      key: 'style',
+      title: '어떤 여행을 원하시나요?',
+      sub: '가장 끌리는 한 가지를 골라주세요.',
+      options: [
+        { value: 'resort', label: '휴양 · 아무것도 안 하기', icon: '🏖️' },
+        { value: 'city', label: '도시 탐험 · 쇼핑 · 야경', icon: '🌃' },
+        { value: 'nature', label: '자연 · 액티비티 · 트레킹', icon: '🏔️' },
+        { value: 'culture', label: '문화 · 미식 · 박물관', icon: '🏛️' },
       ],
     },
-    camping: {
-      name: '캠핑',
-      icon: '🏕️',
-      items: [
-        { text: '신분증', category: 'docs' },
-        { text: '예약확인서', category: 'docs' },
-        { text: '휴대폰 충전기', category: 'electronics' },
-        { text: '헤드랜턴', category: 'electronics' },
-        { text: '보조배터리', category: 'electronics' },
-        { text: '방수 겉옷', category: 'clothing' },
-        { text: '여벌 옷', category: 'clothing' },
-        { text: '등산화/운동화', category: 'clothing' },
-        { text: '칫솔·치약', category: 'toiletries' },
-        { text: '물티슈', category: 'toiletries' },
-        { text: '구급함', category: 'medicine' },
-        { text: '모기약', category: 'medicine' },
-        { text: '텐트', category: 'gear' },
-        { text: '침낭·매트', category: 'gear' },
-        { text: '랜턴', category: 'gear' },
-        { text: '버너·코펠', category: 'gear' },
-        { text: '캠핑 의자·테이블', category: 'gear' },
-        { text: '아이스박스', category: 'gear' },
+    {
+      key: 'budget',
+      title: '1인 예산(항공권 포함)은 어느 정도인가요?',
+      sub: '4~5일 기준입니다.',
+      options: [
+        { value: 1, label: '80만원 이하', icon: '🪙', sub: '국내 또는 가성비 동남아' },
+        { value: 2, label: '80~150만원', icon: '💴', sub: '근거리 해외' },
+        { value: 3, label: '150~300만원', icon: '💳', sub: '동남아 풀빌라 / 일본' },
+        { value: 4, label: '300만원 이상', icon: '✨', sub: '유럽 · 프리미엄' },
       ],
     },
-    business: {
-      name: '출장',
-      icon: '💼',
-      items: [
-        { text: '신분증', category: 'docs' },
-        { text: '명함', category: 'docs' },
-        { text: '출장 서류·계약서', category: 'docs' },
-        { text: '노트북·충전기', category: 'electronics' },
-        { text: '휴대폰 충전기', category: 'electronics' },
-        { text: '보조배터리', category: 'electronics' },
-        { text: '와이셔츠', category: 'clothing' },
-        { text: '정장·재킷', category: 'clothing' },
-        { text: '넥타이', category: 'clothing' },
-        { text: '구두', category: 'clothing' },
-        { text: '속옷·양말', category: 'clothing' },
-        { text: '칫솔·치약', category: 'toiletries' },
-        { text: '면도기', category: 'toiletries' },
-        { text: '상비약', category: 'medicine' },
+    {
+      key: 'season',
+      title: '언제 떠나실 예정인가요?',
+      sub: '계절에 따라 추천이 달라집니다.',
+      options: [
+        { value: 'spring', label: '봄 (3~5월)', icon: '🌸' },
+        { value: 'summer', label: '여름 (6~8월)', icon: '☀️' },
+        { value: 'autumn', label: '가을 (9~11월)', icon: '🍂' },
+        { value: 'winter', label: '겨울 (12~2월)', icon: '❄️' },
       ],
     },
+    {
+      key: 'language',
+      title: '외국어 자신감은 어느 정도인가요?',
+      sub: '솔직하게 골라주세요. 추천이 더 정확해집니다.',
+      options: [
+        { value: 1, label: '영어 어려움', icon: '🤐', sub: '한국어·번역기 위주' },
+        { value: 2, label: '생활 영어 OK', icon: '🙂', sub: '주문·길묻기 가능' },
+        { value: 3, label: '영어 자신 있음', icon: '😎', sub: '대화 가능' },
+      ],
+    },
+    {
+      key: 'adventure',
+      title: '얼마나 새로운 곳을 원하시나요?',
+      sub: '여행 강도와 즉흥성을 가늠하는 질문입니다.',
+      options: [
+        { value: 1, label: '익숙하고 안전한 곳', icon: '🛡️', sub: '인프라 잘 갖춰진 곳' },
+        { value: 2, label: '적당히 새로운 곳', icon: '🧭', sub: '계획 + 약간의 즉흥' },
+        { value: 3, label: '완전 새로운 곳', icon: '🌋', sub: '한국인 적은 곳도 OK' },
+      ],
+    },
+  ];
+
+  // -------- State --------
+  const state = {
+    screen: 'welcome',
+    step: 0,
+    answers: {},
+    results: [],
+    selectedId: null,
   };
 
-  // 상태
-  const items = [];
-  let nextId = 1;
-
-  // DOM 참조
-  const input = document.getElementById('itemInput');
-  const categorySelect = document.getElementById('categorySelect');
-  const addBtn = document.getElementById('addBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const list = document.getElementById('list');
-  const presetButtons = document.getElementById('presetButtons');
-  const progressLabel = document.getElementById('progressLabel');
-  const progressPercent = document.getElementById('progressPercent');
-  const progressFill = document.getElementById('progressFill');
-
-  // 카테고리 헬퍼
-  function getCategory(id) {
-    return categories.find(c => c.id === id) || categories[categories.length - 1];
+  // -------- Scoring --------
+  function scoreDestination(d, a) {
+    let s = 0;
+    // Budget (0~30): exact match = 30, off-by-N reduces
+    s += Math.max(0, 30 - Math.abs(d.budget - a.budget) * 10);
+    // Season fit (0~25): seasonScore is 1~5
+    s += d.seasonScore[a.season] * 5;
+    // Companion fit (0~20)
+    s += d.companionFit[a.companion] * 4;
+    // Style fit (0~25)
+    s += d.styleFit[a.style] * 5;
+    // Language comfort (0~15): closer = better
+    s += Math.max(0, 15 - Math.abs(d.language - a.language) * 6);
+    // Adventure (0~15)
+    s += Math.max(0, 15 - Math.abs(d.adventure - a.adventure) * 6);
+    return s;
   }
 
-  // 카테고리 select 채우기
-  function initCategorySelect() {
-    for (const c of categories) {
-      const opt = document.createElement('option');
-      opt.value = c.id;
-      opt.textContent = `${c.icon} ${c.name}`;
-      categorySelect.appendChild(opt);
-    }
-    categorySelect.value = 'other';
+  function computeResults() {
+    const scored = destinations.map(d => ({
+      ...d,
+      score: scoreDestination(d, state.answers),
+    }));
+    scored.sort((x, y) => y.score - x.score);
+    // Normalize the displayed score to a 100-scale fit %
+    const max = scored[0].score;
+    return scored.slice(0, 3).map(d => ({
+      ...d,
+      fit: Math.round(Math.min(100, (d.score / 130) * 100)),
+    }));
   }
 
-  // 프리셋 버튼 만들기
-  function initPresetButtons() {
-    for (const key of Object.keys(presets)) {
-      const p = presets[key];
-      const btn = document.createElement('button');
-      btn.className = 'preset-btn';
-      btn.innerHTML = `<span class="preset-icon">${p.icon}</span><span>${p.name}</span>`;
-      btn.addEventListener('click', () => loadPreset(key));
-      presetButtons.appendChild(btn);
-    }
+  // -------- Persona --------
+  const styleLabel = { resort: '휴양', city: '도시 탐험', nature: '자연', culture: '문화·미식' };
+  const budgetLabel = { 1: '가성비', 2: '실속', 3: '편안한', 4: '프리미엄' };
+  const advAdj = { 1: '안정형', 2: '균형형', 3: '모험형' };
+  function buildPersona(a) {
+    const name = `${budgetLabel[a.budget]} ${styleLabel[a.style]} ${advAdj[a.adventure]}`;
+    const desc = `당신은 ${budgetLabel[a.budget]} 예산 안에서 ${styleLabel[a.style]} 중심의 여행을 좋아하는 ${advAdj[a.adventure]} 여행자입니다. 아래 처방은 동행, 시기, 외국어 자신감까지 함께 고려한 결과예요.`;
+    return { name, desc };
   }
 
-  // 프리셋 불러오기 (기존 항목에 추가, 중복 텍스트는 건너뜀)
-  function loadPreset(key) {
-    const preset = presets[key];
-    if (!preset) return;
-    const existing = new Set(items.map(i => i.text));
-    let added = 0;
-    for (const entry of preset.items) {
-      if (existing.has(entry.text)) continue;
-      items.push({ id: nextId++, text: entry.text, done: false, category: entry.category });
-      added++;
-    }
-    render();
+  // -------- Render --------
+  const app = document.getElementById('app');
+
+  function el(tag, opts = {}, ...children) {
+    const e = document.createElement(tag);
+    if (opts.class) e.className = opts.class;
+    if (opts.text != null) e.textContent = opts.text;
+    if (opts.html != null) e.innerHTML = opts.html;
+    if (opts.attrs) for (const k in opts.attrs) e.setAttribute(k, opts.attrs[k]);
+    if (opts.on) for (const ev in opts.on) e.addEventListener(ev, opts.on[ev]);
+    for (const c of children) if (c) e.appendChild(c);
+    return e;
   }
 
-  function addItem() {
-    const text = input.value.trim();
-    if (!text) return;
-    items.push({
-      id: nextId++,
-      text,
-      done: false,
-      category: categorySelect.value,
-    });
-    input.value = '';
-    input.focus();
-    render();
-  }
-
-  function toggleItem(id) {
-    const item = items.find(i => i.id === id);
-    if (item) item.done = !item.done;
-    render();
-  }
-
-  function deleteItem(id) {
-    const idx = items.findIndex(i => i.id === id);
-    if (idx !== -1) items.splice(idx, 1);
-    render();
-  }
-
-  function clearAll() {
-    if (items.length === 0) return;
-    if (!confirm('모든 항목을 삭제할까요?')) return;
-    items.length = 0;
-    render();
-  }
-
-  // 인라인 편집 시작
-  function startEdit(id, textEl) {
-    const item = items.find(i => i.id === id);
-    if (!item) return;
-
-    const editInput = document.createElement('input');
-    editInput.type = 'text';
-    editInput.className = 'item-edit';
-    editInput.value = item.text;
-    editInput.maxLength = 50;
-
-    let committed = false;
-
-    const commit = () => {
-      if (committed) return;
-      committed = true;
-      const newText = editInput.value.trim();
-      if (newText) item.text = newText;
-      render();
-    };
-
-    const cancel = () => {
-      if (committed) return;
-      committed = true;
-      render();
-    };
-
-    editInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        commit();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        cancel();
-      }
-    });
-    editInput.addEventListener('blur', commit);
-
-    textEl.replaceWith(editInput);
-    editInput.focus();
-    editInput.select();
+  function brandRow() {
+    return el('div', { class: 'brand-row' },
+      el('div', { class: 'brand', html: '<span class="dot">●</span> 여행 컨설팅' }),
+      el('div', { text: '당신만의 여행 처방전' }),
+    );
   }
 
   function render() {
-    list.innerHTML = '';
-
-    if (items.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.innerHTML = '<div class="empty-icon">🧳</div>아직 추가된 항목이 없어요<br>템플릿을 불러오거나 직접 입력해 보세요';
-      list.appendChild(empty);
-    } else {
-      // 카테고리 순서대로 그룹화
-      for (const cat of categories) {
-        const groupItems = items.filter(i => i.category === cat.id);
-        if (groupItems.length === 0) continue;
-
-        const groupDoneCount = groupItems.filter(i => i.done).length;
-
-        const group = document.createElement('div');
-        group.className = 'category-group';
-
-        const header = document.createElement('div');
-        header.className = 'category-header';
-        header.innerHTML = `<span>${cat.icon}</span><span>${cat.name}</span><span class="count">${groupDoneCount}/${groupItems.length}</span>`;
-        group.appendChild(header);
-
-        for (const item of groupItems) {
-          const li = document.createElement('li');
-          li.className = 'item' + (item.done ? ' done' : '');
-
-          const checkbox = document.createElement('div');
-          checkbox.className = 'checkbox' + (item.done ? ' checked' : '');
-          checkbox.addEventListener('click', () => toggleItem(item.id));
-
-          const text = document.createElement('span');
-          text.className = 'item-text';
-          text.textContent = item.text;
-          text.title = '더블클릭하여 수정';
-          text.addEventListener('dblclick', () => startEdit(item.id, text));
-
-          const delBtn = document.createElement('button');
-          delBtn.className = 'delete-btn';
-          delBtn.innerHTML = '×';
-          delBtn.setAttribute('aria-label', '삭제');
-          delBtn.addEventListener('click', () => deleteItem(item.id));
-
-          li.appendChild(checkbox);
-          li.appendChild(text);
-          li.appendChild(delBtn);
-          group.appendChild(li);
-        }
-
-        list.appendChild(group);
-      }
-    }
-
-    const total = items.length;
-    const done = items.filter(i => i.done).length;
-    const percent = total === 0 ? 0 : Math.round((done / total) * 100);
-    progressLabel.textContent = `${total}개 중 ${done}개 완료`;
-    progressPercent.textContent = `${percent}%`;
-    progressFill.style.width = `${percent}%`;
+    app.innerHTML = '';
+    app.appendChild(brandRow());
+    const card = el('div', { class: 'card' });
+    app.appendChild(card);
+    if (state.screen === 'welcome') renderWelcome(card);
+    else if (state.screen === 'quiz') renderQuiz(card);
+    else if (state.screen === 'loading') renderLoading(card);
+    else if (state.screen === 'result') renderResult(card);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 이벤트 바인딩
-  addBtn.addEventListener('click', addItem);
-  clearBtn.addEventListener('click', clearAll);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') addItem();
-  });
+  function renderWelcome(c) {
+    c.appendChild(el('div', { class: 'hero-emoji', text: '🧭' }));
+    c.appendChild(el('h1', { class: 'title', text: '당신만의 여행 처방전, 1분 만에' }));
+    c.appendChild(el('p', { class: 'lede', text: '6개 질문으로 여행 성향을 진단하고, 어울리는 여행지 TOP 3와 코스·예산·준비물·현지 팁까지 한 장의 리포트로 받아보세요.' }));
+    const perks = el('ul', { class: 'perks' });
+    [
+      '여행 스타일·예산·외국어·시기 종합 점수',
+      '여행지별 일정·예산·준비물 자동 생성',
+      '현지에서 진짜 필요한 팁 3가지',
+    ].forEach(t => perks.appendChild(el('li', { text: t })));
+    c.appendChild(perks);
+    c.appendChild(el('button', {
+      class: 'primary brand',
+      text: '진단 시작하기 →',
+      on: { click: () => { state.screen = 'quiz'; state.step = 0; render(); } },
+    }));
+    c.appendChild(el('p', { class: 'footer-note', text: '익명 · 데이터 저장 안 함' }));
+  }
 
-  // 초기화
-  initCategorySelect();
-  initPresetButtons();
+  function renderQuiz(c) {
+    const q = questions[state.step];
+
+    // Progress
+    const prog = el('div', { class: 'progress' });
+    for (let i = 0; i < questions.length; i++) {
+      prog.appendChild(el('div', { class: 'seg' + (i <= state.step ? ' on' : '') }));
+    }
+    c.appendChild(prog);
+
+    c.appendChild(el('div', { class: 'step-label', text: `STEP ${state.step + 1} / ${questions.length}` }));
+    c.appendChild(el('h2', { class: 'title', text: q.title }));
+    c.appendChild(el('p', { class: 'lede', text: q.sub }));
+
+    const opts = el('div', { class: 'options' + (q.options.length === 4 ? ' two-col' : '') });
+    for (const opt of q.options) {
+      const btn = el('button', {
+        class: 'option',
+        on: { click: () => {
+          state.answers[q.key] = opt.value;
+          if (state.step + 1 < questions.length) {
+            state.step++;
+            render();
+          } else {
+            state.screen = 'loading';
+            render();
+            setTimeout(() => {
+              state.results = computeResults();
+              state.selectedId = state.results[0].id;
+              state.screen = 'result';
+              render();
+            }, 1100);
+          }
+        }},
+      },
+        el('span', { class: 'icon', text: opt.icon }),
+        el('span', { class: 'opt-text', text: opt.label },
+          opt.sub ? el('span', { class: 'opt-sub', text: opt.sub }) : null,
+        ),
+      );
+      opts.appendChild(btn);
+    }
+    c.appendChild(opts);
+
+    const nav = el('div', { class: 'quiz-nav' });
+    if (state.step > 0) {
+      nav.appendChild(el('button', {
+        class: 'ghost',
+        text: '← 이전',
+        on: { click: () => { state.step--; render(); } },
+      }));
+    } else {
+      nav.appendChild(el('span'));
+    }
+    nav.appendChild(el('span', { class: 'footer-note', text: '한 번에 하나씩 선택하면 자동으로 넘어갑니다' }));
+    c.appendChild(nav);
+  }
+
+  function renderLoading(c) {
+    const wrap = el('div', { class: 'loading-wrap' });
+    wrap.appendChild(el('div', { class: 'spinner' }));
+    wrap.appendChild(el('div', { class: 'loading-text', text: '여행 성향 분석 중…' }));
+    c.appendChild(wrap);
+  }
+
+  function renderResult(c) {
+    const persona = buildPersona(state.answers);
+
+    // Persona card
+    const pCard = el('div', { class: 'persona-card' });
+    pCard.appendChild(el('div', { class: 'persona-eyebrow', text: 'YOUR TRAVELER TYPE' }));
+    pCard.appendChild(el('div', { class: 'persona-name', text: persona.name + ' 여행자' }));
+    pCard.appendChild(el('div', { class: 'persona-desc', text: persona.desc }));
+    c.appendChild(pCard);
+
+    // Top 3
+    c.appendChild(el('div', { class: 'section-title', text: '추천 여행지 TOP 3' }));
+    const list = el('div', { class: 'dest-list' });
+    state.results.forEach((d, i) => {
+      const isActive = state.selectedId === d.id;
+      const item = el('button', {
+        class: 'dest-item' + (isActive ? ' active' : ''),
+        on: { click: () => { state.selectedId = d.id; render(); } },
+      });
+      const head = el('div', { class: 'dest-head' });
+      head.appendChild(el('span', { class: 'dest-rank' + (i === 1 ? ' r2' : i === 2 ? ' r3' : ''), text: String(i + 1) }));
+      head.appendChild(el('span', { class: 'dest-emoji', text: d.emoji }));
+      head.appendChild(el('span', { class: 'dest-name', text: d.name },
+        el('span', { class: 'dest-score', text: `fit ${d.fit}%` }),
+      ));
+      head.appendChild(el('span', { class: 'dest-country', text: d.country }));
+      item.appendChild(head);
+      item.appendChild(el('div', { class: 'dest-reason', text: d.oneLineReason }));
+      list.appendChild(item);
+    });
+    c.appendChild(list);
+
+    // Detail of selected
+    const selected = state.results.find(r => r.id === state.selectedId) || state.results[0];
+    const detail = el('div', { class: 'detail-card' });
+    const head = el('div', { class: 'detail-head' });
+    head.appendChild(el('span', { class: 'dest-emoji', text: selected.emoji }));
+    head.appendChild(el('span', { class: 'detail-name', text: selected.name }));
+    head.appendChild(el('span', { class: 'detail-country', text: selected.country }));
+    detail.appendChild(head);
+
+    const tags = el('div', { class: 'detail-tags' });
+    selected.tags.forEach(t => tags.appendChild(el('span', { class: 'tag', text: '# ' + t })));
+    detail.appendChild(tags);
+
+    function block(title, listItems, cls) {
+      const b = el('div', { class: 'detail-block' + (cls ? ' ' + cls : '') });
+      b.appendChild(el('h4', { text: title }));
+      if (Array.isArray(listItems)) {
+        const ul = el('ul');
+        listItems.forEach(it => ul.appendChild(el('li', { text: it })));
+        b.appendChild(ul);
+      } else {
+        b.appendChild(el('div', { class: 'budget', text: listItems }));
+      }
+      return b;
+    }
+    detail.appendChild(block('추천 코스', selected.course));
+    detail.appendChild(block('예상 비용', selected.budgetEstimate));
+    detail.appendChild(block('출국 전 준비물', selected.prep));
+    detail.appendChild(block('현지 팁', selected.tips));
+    c.appendChild(detail);
+
+    // Actions
+    const actions = el('div', { class: 'result-actions' });
+    actions.appendChild(el('button', {
+      class: 'ghost',
+      text: '↻ 다시 진단',
+      on: { click: () => { state.screen = 'welcome'; state.step = 0; state.answers = {}; state.results = []; state.selectedId = null; render(); } },
+    }));
+    actions.appendChild(el('button', {
+      class: 'primary brand',
+      text: '결과 공유하기',
+      on: { click: async () => {
+        const text = `[여행 처방전]\n유형: ${persona.name} 여행자\n추천 1순위: ${selected.emoji} ${selected.name} (${selected.country}) — fit ${selected.fit}%\n${selected.oneLineReason}\n${location.href}`;
+        if (navigator.share) {
+          try { await navigator.share({ title: '여행 처방전', text, url: location.href }); }
+          catch (e) {}
+        } else {
+          try {
+            await navigator.clipboard.writeText(text);
+            alert('결과가 클립보드에 복사되었어요!');
+          } catch (e) { alert('공유가 지원되지 않는 환경입니다.'); }
+        }
+      }},
+    }));
+    c.appendChild(actions);
+
+    c.appendChild(el('p', { class: 'footer-note', text: '본 처방은 정적 데이터 기반의 추천이며, 항공·환율 등 실시간 정보는 별도 확인이 필요합니다.' }));
+  }
+
   render();
 </script>
 </body>
